@@ -1,4 +1,4 @@
-from conans import ConanFile, CMake, tools#, AutoToolsBuildEnvironment
+from conans import ConanFile, CMake, tools
 import os
 
 class LibcrocoConan(ConanFile):
@@ -33,14 +33,6 @@ class LibcrocoConan(ConanFile):
         os.unlink(archive_name)
 
     def build(self):
-        #vars = {'PKG_CONFIG_PATH': "%s/lib/pkgconfig:%s/lib/pkgconfig:%s/lib/pkgconfig:%s/lib/pkgconfig"
-        #%(self.deps_cpp_info["libffi"].rootpath,self.deps_cpp_info["glib"].rootpath,
-        #self.deps_cpp_info["gdk-pixbuf"].rootpath,self.deps_cpp_info["libxml2"].rootpath)}
-
-        #with tools.environment_append(vars):
-        #    self.run("./configure --prefix %s/build --libdir %s/build/lib --enable-introspection"%(os.getcwd(),os.getcwd()))
-        #    self.run("make -j4")
-        #    self.run("make install")
         with tools.chdir(self.source_subfolder):
             with tools.environment_append({
                 'PKG_CONFIG_PATH' : '%s/lib/pkgconfig:%s/lib/pkgconfig:%s/lib/pkgconfig:%s/lib/pkgconfig'
@@ -57,10 +49,6 @@ class LibcrocoConan(ConanFile):
                 self.run("./configure %s"%(' '.join(_args)))
                 self.run("make -j4")
                 self.run("make install")
-                #autotools = AutoToolsBuildEnvironment(self)
-                #autotools.configure(args=_args)
-                #autotools.make(args=["-j4"])
-                #autotools.install()
 
     def package(self):
         if tools.os_info.is_linux:
